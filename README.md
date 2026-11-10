@@ -1,28 +1,31 @@
+# WARNING
+This project was never finished. It was intended to be the first of many 'flash projects', a blog series I had where I take one of my random project ideas and get it fully functioning in at most 24h. That being said, I started this when I was working full time which meant that I really did not have the time to finish it. I have since fallen out of interest with 2b2t, but I decided to open source this project just in case it comes in handy to anyone out there.
+
+Please ignore my cringy writing btw
+
 # 2bWikiScrape
 A short and simple program made to scrape [The 2b2t Wiki](https://2b2t.miraheze.org). I started this project because I would like to scrape member lists from base/group/event pages for use in a 2b2t Discord bot I'm working on (name TBD).
 
 *If you're interested, here's a little sneak peak of [QueuePeek v2](https://enby.pics/u/DVp9z9.png) I'm working on (QueuePeek was a 2b2t exploit allowing you to view/scrape the entirety of the 2b2t queue, I have found a very janky way to do this for about 35% of players in queue)*
 
 ## 'Devlog'
-This is just sort of a blog-ish area for me to type out my thoughts as I work on this project. This is likely going to eventually turn into the first blog post on my website in a series I'm going to call 'flash projects' where I give myself ~24 hours from start to finish on a random project idea.
-### Initial Thoughts (9:30am)
-This doesn't seem too hard. The 2b2t wiki is hosted on miraheze.org and, like most wikis, is based on MediaWiki. This means we can simply get the API at https://2b2t.miraheze.org/w/api.php. My only wiki scraping experience is [The Hypixel Wiki](https://wiki.hypixel.net) (reference [my API](https://api.ragingenby.dev/#tag/Scraping/operation/GET_wiki_user))- and anyone who has attempted to get any usable data from that knows how annoying it is. That being said- the Hypixel wiki is quite complicated and I assume the 2b wiki will be easier since it doesn't require laying out complex templates such as crafting recipes. I have to head to work in a few minutes so I'll likely have to put this on pause for a while.
-### Time to actually do stuff (7:17pm)
+This is just sort of a blog-ish area for me to type out my thoughts as I work on this project. This is likely going to eventually turn into the first blog post on my website in a series I'm going to call 'flash projects' where I give myself ~24 hours from start to finish on a random project idea. 
+### Initial Thoughts
+This doesn't seem too hard. The 2b2t wiki is hosted on miraheze.org and, like most wikis, is based on MediaWiki. This means we can simply get the API at https://2b2t.miraheze.org/w/api.php. My only wiki scraping experience is [The Hypixel Wiki](https://wiki.hypixel.net) (reference [my API](https://api.ragingenby.dev/#tag/Scraping/operation/GET_wiki_user)) and anyone who has attempted to get any usable data from that knows how annoying it is. That being said- the Hypixel wiki is quite complicated and I assume the 2b wiki will be easier since it doesn't require laying out complex templates such as crafting recipes. I have to head to work in a few minutes so I'll likely have to put this on pause for a while.
+### Time to actually do stuff
 I just got some free time for the first time since this morning so I'm actually getting started on making this thing. I planned on making my own simple MediaWiki API parser. However, Python's main advantage is its massive selection of libraries for anything you could possibly imagine. This is the main reason I use it for flash projects like this. I did a little research and most libraries I found were either poorly made or did not support async- [async-mediawiki](https://pypi.org/project/async-mediawiki/) seems promising though.
-### I got distracted (9:12pm-9:29pm)
+### I got distracted
 Unforunately as a carbon based lifeform I require food to sustain myself so I got distracted making dinner but I am (hopefully) actually going to finish this now. NEXT COMMIT WILL HAVE ACTUAL WORK TRUST
 
 **I LIED** Unfortunately, `async-mediawiki` does not have documentation so I am going to have to do some studying to figure out how I can use this, but I think that is worth it considering the alternatives. I am hoping it works because it is like 6-7 years old- but the most updated wrapper I could find is from 2021 and didn't seem as well made so I'm hoping this works.
-### Finding a new library (9:30pm-9:46pm)
+### Finding a new library
 I honestly don't know why I had any faith that this random 7 year old package would still function. I should've at least slightly tested it before writing my code around it but that's my fault. Time to test a bunch of alternatives.
 
-First I am looking at [aiomwclient](https://github.com/Wadu436/aiomwclient). I was originally turned away from this by the fact that it requires a setup script to run (in my experience a red flag when it comes to Python packages)- but as it turns out this is an optional step. A fun bonus is that aiomwclient is an async wrapper of [mwclient](https://github.com/mwclient/mwclient) which even ha [readthedocs page](https://mwclient.readthedocs.io/en/latest/user/connecting.html)!
-
-**OK** so I got distracted overengineering user-agent generation but [this](https://enby.pics/u/SX9dSj.png) is beautiful and you can't argue otherwise.
-### THE PACKAGES SUCK (11:22pm)
+First I am looking at [aiomwclient](https://github.com/Wadu436/aiomwclient). I was originally turned away from this by the fact that it requires a setup script to run (in my experience a red flag when it comes to Python packages)- but as it turns out this is an optional step. A fun bonus is that aiomwclient is an async wrapper of [mwclient](https://github.com/mwclient/mwclient) which even has a [readthedocs page](https://mwclient.readthedocs.io/en/latest/user/connecting.html)!
+### THE PACKAGES SUCK
 No offense to the authors of any of these MediaWiki packages, but they suck. I don't know why I bothered spending this much time finding a package when I have more experience scraping HTML than using MediaWiki but that's my fault for getting overexcited
-### Basic Work Done (11:49pm)
-Ok I have put together a simple little API script to get the ID and name of every page on the wiki. This would've taken me 5 minutes to do and I should've just done this from the start but you live and you learn. In the finaly blog post this entry will probably be the second paragraph but that also means this is where the project really starts!
+### Basic Work Done
+Ok I have put together a simple little script to get the ID and name of every page on the wiki. This would've taken me 5 minutes to do and I should've just done this from the start but you live and you learn. In the finaly blog post this entry will probably be the second paragraph but that also means this is where the project really starts!
 
 For logging of data, I currently am just using `output/` directory. I have `output/all_pages.json` which has every page on the wiki in this format:
 ```json
@@ -34,18 +37,16 @@ For logging of data, I currently am just using `output/` directory. I have `outp
 ```
 And I am also logging the raw HTML sent by the API to `output/{pagename}.html`. Obviously this isn't efficient and just for temporary use, but I now need to come up with a more permanent solution. You may notice the fact that I establish an unused variable, `MONGO_URI`, in `constants.py`- I am of course using my favorite DB: MongoDB.
 
-Quick side tangent: For those unaware of my MongoDB obsession, it was sparked by [TGWaffles](https://github.com/TGWaffles). He has a really cool project (which I am now involved in) called [iTEM](https://tem.cx). Very early on into my developer days I was interested in this project and asked him how it worked, he told me a bunch of stuff but importantly the fact that he used MongoDB. I decided to copy his project idea and now run my own copy of iTEM called [Skypixel](https://ragingenby.dev/skypixel). Anyway, I used MongoDB for this and ever since I have been obsessed with using it for any large scale storage application.
-
 Now MongoDB **DEFINITELY** is not the most efficient way to store this data. I mean I am talking about documents that look roughly like:
 ```json
 {
     "_id": 4097,
     "pageid": "Popbob",
     "ns": 0,
-    "html": "BIG ASS HTML BLOB"
+    "html": "BIG HTML BLOB"
 }
 ```
-I __***KNOW***__ this is inefficient and not even a good use of MongoDB's storage system, but I am doing this temporarily. In the long term I don't even planning on storing the actual HTML (maybe).
+I __***KNOW***__ this is inefficient, but I am doing this temporarily. This is JUST so I have a nicer UI to view all of the items in. In the long term I don't even planning on storing the actual HTML (maybe).
 ### SCRAPING TIME (12:00am)
 OK so now we have page ID's for every 2b wiki page so we can just use `action=parse` requests to the MediaWiki API to get all the data we want... right?
 
@@ -103,7 +104,7 @@ Following [[TheCampingRusher|TheCampingRusher's]] video, she played 2b2t increas
 </details>
 
 Yeah it's not... fun to parse, but it is certainly possible! I'm sure it won't take me that long to do that thou-
-### it took me a long time to do that (12:40am)
+### it took me a long time to do that
 I spent way to long making some very shitty code to parse this data and it is... passable? It's definitely not readable and I refuse to comment my personal code (mostly because I'm lazy but I excuse it by saying it's to prevent people from mistaking my work as Ai slop). Anyway here's what I wrote up if you're curious, I promise you it is bad but you're free to attempt to read it:
 <details>
 <summary>Python jumpscare</summary>
@@ -207,7 +208,7 @@ def mediawiki_to_markdown(wikitext: str) -> str:
 </details>
 
 All this code does is transform the MediaWiki dump into markdown. I know that doesn't seem very helpful BUT I PROMISE IT IS TRUST ME (don't). Anyway this is probably pretty unstable because I only tested it with a few pages but its 12:45am now and I have work in the morning so that's for future me. LGTM
-### back to the main idea (9:11am-9:38am)
+### back to the main idea
 I sorta lost sight of the original idea which was to scrape memberlists from wiki pages. The steps I've been doing certainly help with that but I need to get off my ass and actually do that. The first step is to honestly download all the wiki pages. The ground work for actually getting the playerlists is super easy considering we can just [check the markdown](https://enby.pics/u/dA2yBu.png). Luckily, MediaWiki allows you to request up to 50 pages at a timewhich means I can download the entire wiki in 28 API requests. I slopped together some code to send these bulk requests. After some slight edits (such as cleansing page names so that the file path isn't broken), it just... works. I'm going to remove output/pages/*.md from .gitignore so this will be committed to the repo in one sec.
 
 Unfortunately I have to go to work again, but this is a great start. There are formatting issues that become apparent pretty fast by scrolling through the generated files but this looks amazing at the moment. I think I should be able to wrap this up in a few hours when I get home.
